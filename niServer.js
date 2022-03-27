@@ -23,10 +23,8 @@ const app = express()
 app.enable('trust proxy')
 
 app.use(function (req, res, next) {
-  if (process.env.NODE_ENV != 'development' && !req.secure) {
+  if (process.env.NODE_ENV != 'development' && !req.secure)
     return res.redirect('https://' + req.headers.host + req.url)
-  }
-
   next()
 })
 
@@ -35,7 +33,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 const corsOptions = {
-  origin: 'http://localhost:3001/',
+  origin: ['localhost:3000', 'localhost:3001'],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
@@ -68,12 +66,16 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
+// set the view engine to ejs
+app.set('view engine', 'ejs')
+
 // Static folder
-// app.use(express.static(path.join(__dirname, 'public')))
+// console.log(process.cwd())
+app.use(express.static(path.join(process.cwd(), 'views')))
 
 // Routes
 app.get('/', (req, res) => {
-  res.json({ msg: 'this worked' })
+  res.render('index')
 })
 
 app.use('/api/users', userRoutes)

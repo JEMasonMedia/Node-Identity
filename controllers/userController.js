@@ -47,6 +47,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
     }
 
     if (!user) return res.status(400).json({ msg: 'Invalid Credentials' })
+    delete user._doc.password
 
     req.logIn(user, (err) => {
       if (err) {

@@ -1,6 +1,6 @@
 # Node-Identity
 
-Node-Identity is a library meant to emulate the hugely popular "ASP.Net Identity" library for the Node environment. This library will contain a fully functioning Authentication and Authorization mechanism for React, using Next.js page components for the Register/Login functionality and User Profile management, as well as a client component library for Redux integration. Later versions of this library will include actual "ASP.Net Identity" integration, multiple methods of multi-factor authentication, and integration with B2C, Microsoft Live, Google Auth services, and many others. The first iteration of this library will use MongoDB, but will later allow use of virtually any database solution.
+Node-Identity is a library meant to emulate the hugely popular "ASP.Net Identity" library for the Node environment. This library will contain a fully functioning Authentication and Authorization API for React, using EJS pages for the Register/Login functionality and User Profile management, as well as a client component library for React/Next/Redux integration. Later versions of this library will include actual "ASP.Net Identity" integration, multiple methods of multi-factor authentication, and integration with B2C, Microsoft Live, Google Auth services, and many others. The first iteration of this library will use MongoDB, but will later allow use of virtually any database solution.
 
 ## Purpose
 
