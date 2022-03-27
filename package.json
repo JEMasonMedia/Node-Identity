@@ -3,8 +3,12 @@
   "version": "0.0.1",
   "description": "A library for authentication/authorization for the Node environment.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cross-env NODE_ENV=development nodemon index",
+    "client": "cd client && npm start",
+    "dev2": "concurrently \"cross-env NODE_ENV=development nodemon index\" \"npm run client\"",
+    "start": "cross-env NODE_ENV=production node index"
   },
   "repository": {
     "type": "git",
@@ -24,11 +28,13 @@
   },
   "homepage": "https://github.com/JEMasonMedia/Node-Identity#readme",
   "dependencies": {
+    "axios": "^0.26.1",
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^4.6.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "express-async-handler": "^1.2.0",
     "express-session": "^1.17.2",
     "express-validator": "^6.14.0",
     "moment": "^2.29.1",

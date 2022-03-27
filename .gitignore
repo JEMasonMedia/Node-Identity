@@ -107,3 +107,6 @@ dist
 
 # .vscode
 /.vscode
+
+# extras
+/utils/adminSeed.js
