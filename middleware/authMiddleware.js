@@ -5,18 +5,16 @@ const protect = asyncHandler(async (req, res, next) => {
   if (req.isAuthenticated()) return next()
   else {
     res.status(401).json({ msg: 'Not Authorized' })
-    next()
   }
 })
 
 const isAdmin = asyncHandler(async (req, res, next) => {
   const user = await User.findById(String(req.user._id)).select('+isAdmin')
 
-  if (user && user.isAdmin) {
+  if (user !== null && user.isAdmin) {
     next()
   } else {
-    res.status(401)
-    throw new Error('Not authorized as an admin')
+    res.status(401).json({ msg: 'Not authorized as an admin' })
   }
 })
 
