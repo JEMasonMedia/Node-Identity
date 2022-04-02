@@ -1,5 +1,3 @@
-// import express from 'express'
-// const userAuth = express.Router()
 import asyncHandler from 'express-async-handler'
 import User from '../database/models/User.js'
 import passport from '../passport/index.js'
@@ -8,13 +6,24 @@ import passport from '../passport/index.js'
 // @route   POST /api/users/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, userName, email, password } = req.body
+  const {
+    firstName,
+    lastName,
+    userName,
+    email,
+    password,
+    password2,
+    fromForm,
+  } = req.body
+
+  if (password !== password2) {
+    return res.status(400).json({ msg: 'Invalid user data' })
+  }
 
   let userExists = await User.findOne({ $or: [{ email }, { userName }] })
 
   if (userExists !== null) {
-    res.status(400)
-    throw new Error('User already exists')
+    return res.status(400).json({ msg: 'User already exists' })
   }
 
   const user = await User.create({
@@ -25,11 +34,13 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   })
 
-  if (user) {
-    res.status(201).json(user)
+  const createdUser = await User.findById(user._id)
+
+  if (createdUser) {
+    if (fromForm) res.status(201).redirect('/login')
+    else res.status(201).json(createdUser)
   } else {
-    res.status(400)
-    throw new Error('Invalid user data')
+    return res.status(400).json({ msg: 'Invalid user data' })
   }
 })
 
@@ -60,11 +71,15 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
       // console.log(req.body.rememberme)
       // console.log(req.session.cookie.maxAge)
-      if (req.body.rememberme)
-        req.session.cookie.maxAge = 90 * 24 * 60 * 60 * 1000
+      // if (req.body.rememberme)
+      //   req.session.cookie.maxAge = 90 * 24 * 60 * 60 * 1000
       // console.log(req.session.cookie.maxAge)
 
-      return res.status(200).json({ user })
+      // if (fromForm) res.status(201).redirect('/profile')
+      // else res.status(201).json(user)
+      return req.body.fromForm
+        ? res.status(201).redirect('/profile')
+        : res.status(200).json({ user })
     })
   })(req, res, next)
 })

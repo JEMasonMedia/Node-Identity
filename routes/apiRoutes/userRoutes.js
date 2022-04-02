@@ -13,14 +13,16 @@ import {
   getUser,
   updateUser,
   deleteUser,
-} from '../controllers/userController.js'
-import { protect, isAdmin } from '../middleware/authMiddleware.js'
+} from '../../controllers/userController.js'
+import { protect, isAdmin } from '../../middleware/authMiddleware.js'
 
 // userRoutes.get('/createdummies', createDummies)
 
+// all urls start: /api/users
 userRoutes.post('/register', registerUser)
 userRoutes.post('/login', loginUser)
 userRoutes.post('/logout', logoutUser)
+userRoutes.get('/logout', logoutUser)
 userRoutes
   .route('/profile')
   .get(protect, getUserProfile)

@@ -5,11 +5,12 @@ import morgan from 'morgan'
 import cors from 'cors'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
-
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import passport from './passport/index.js'
 import connectDB from './database/index.js'
-import userRoutes from './routes/userRoutes.js'
+import apiRoutes from './routes/apiRoutes.js'
+import userRoutes from './routes/apiRoutes/userRoutes.js'
+import pageRoutes from './routes/pageRoutes.js'
 
 // Load config
 dotenv.config()
@@ -72,13 +73,12 @@ app.set('view engine', 'ejs')
 // Static folder
 // console.log(process.cwd())
 app.use(express.static(path.join(process.cwd(), 'views')))
+// app.use(express.static('images'))
 
 // Routes
-app.get('/', (req, res) => {
-  res.render('index')
-})
+app.use('/api', apiRoutes)
 
-app.use('/api/users', userRoutes)
+app.get('/*', pageRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
