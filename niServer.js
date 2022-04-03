@@ -21,7 +21,7 @@ connectDB()
 // Create app
 const app = express()
 
-app.enable('trust proxy')
+app.enable('trust proxy', 1)
 
 app.use(function (req, res, next) {
   if (process.env.NODE_ENV != 'development' && !req.secure)
@@ -44,17 +44,17 @@ app.use(cors(corsOptions))
 const mongoStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
   collectionName: 'sessions',
-  ttl: 60000,
+  ttl: 86400000,
 })
 
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     store: mongoStore,
-    cookie: { maxAge: 60000 },
-    rolling: true,
-    resave: true,
-    saveUninitialized: false,
+    cookie: { maxAge: 86400000 },
+    rolling: false,
+    resave: false,
+    saveUninitialized: true,
   })
 )
 

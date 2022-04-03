@@ -5,9 +5,10 @@ const LocalStrategy = Strategy
 const strategy = new LocalStrategy((username, password, done) => {
   // console.log(username, password)
   const usernameORemail =
-    username.indexOf('@') === -1 ? { username } : { email: username }
+    username.indexOf('@') === -1 ? { userName: username } : { email: username }
 
   User.findOne(usernameORemail, (err, user) => {
+    // console.log(user)
     if (err) return done(err)
 
     if (!user)

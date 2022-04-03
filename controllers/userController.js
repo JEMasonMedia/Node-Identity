@@ -48,6 +48,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res, next) => {
+  // console.log(req.body)
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       res.clearCookie('connect.sid')
@@ -84,7 +85,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   })(req, res, next)
 })
 
-// @desc    Logout user & set cookie
+// @desc    Logout user & destroy cookie
 // @route   POST /api/users/logout
 // @access  Public
 const logoutUser = asyncHandler(async (req, res) => {
@@ -92,7 +93,8 @@ const logoutUser = asyncHandler(async (req, res) => {
     req.logOut()
     res.clearCookie('connect.sid')
     req.session.destroy((err) => {
-      res.status(200).send({ msg: 'Logged Out' })
+      if (req.query.link) res.redirect('/login')
+      else res.status(200).send({ msg: 'Logged Out' })
     })
   } else {
     res.status(304).send({ msg: 'None to Log Out' })
@@ -118,12 +120,15 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const { firstName, lastName, userName, email, password } = req.body
-  let user = await User.findById(req.params.id)
+  console.log('here')
+  const { firstName, lastName, userName, email, password } = req.params
+  console.log(req.body)
+  let user = await User.findById(req.user._id)
+  console.log(user)
 
   if (user) {
-    user._doc = {
-      ...user._doc,
+    user = {
+      ...user,
       firstName,
       lastName,
       userName,
@@ -132,7 +137,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 
     let updatedUser = await user.save()
-    updatedUser = await User.findById(req.params.id)
+    updatedUser = await User.findById(req.user._id)
 
     if (updatedUser) {
       res.json(updatedUser)
